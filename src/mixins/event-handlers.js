@@ -123,6 +123,14 @@ var EventHandlers = {
       return;
     }
     var touchObject = this.state.touchObject;
+
+    var swipedSliderCount = 1;
+    if (this.props.multipleSwipe) {
+      swipedSliderCount = Math.round(Math.abs(touchObject.startX - touchObject.curX) / this.state.slideWidth);
+      console.log("currentSlide = " + this.state.currentSlide +
+                  " slidesToScroll = " + this.props.slidesToScroll +
+                  " swipedSliderCount = " + swipedSliderCount);
+    }
     var minSwipe = this.state.listWidth/this.props.touchThreshold;
     var swipeDirection = this.swipeDirection(touchObject);
 
@@ -141,9 +149,9 @@ var EventHandlers = {
     if (touchObject.swipeLength > minSwipe) {
       e.preventDefault();
       if (swipeDirection === 'left') {
-        this.slideHandler(this.state.currentSlide + this.props.slidesToScroll);
+        this.slideHandler(this.state.currentSlide + this.props.slidesToScroll * swipedSliderCount);
       } else if (swipeDirection === 'right') {
-        this.slideHandler(this.state.currentSlide - this.props.slidesToScroll);
+        this.slideHandler(this.state.currentSlide - this.props.slidesToScroll * swipedSliderCount);
       } else {
         this.slideHandler(this.state.currentSlide);
       }
